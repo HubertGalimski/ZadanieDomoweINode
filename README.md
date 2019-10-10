@@ -43,7 +43,7 @@ posiadający jeden element pośredni i co najmniej jeden element następny
 - zawiera główną logikę projektu 
 - dostępna pod adresem [link to MyStructure!](https://github.com/HubertGalimski/ZadanieDomoweINode/blob/master/src/main/java/MyStructure.java)
 
-# Logika metod MyStructure
+## Logika metod MyStructure
 ##### Metoda count 
 działa na zasadzie rekurencji dlatego też została stworzona odzielna metoda pomocnicza przyjmująca jako parametr 
 listę węzłów, którą należy przeszukać w celu ich policzenia.
