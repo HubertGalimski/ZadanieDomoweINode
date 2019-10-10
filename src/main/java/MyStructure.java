@@ -1,60 +1,68 @@
-import org.w3c.dom.Node;
-
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MyStructure implements IMyStructure {
 
-
     private List<INode> nodes;
 
-    public static boolean isIComposite(Object o) {
-        return o instanceof ICompositeNode;
+    public INode findByRenderer(String renderer) {
+        return findFromTheListByPredicate(getNodes(), t -> t.getRenderer().equals(renderer));
     }
 
     public INode findByCode(String code) {
-        return findBy(code, t -> t.getCode().equals(code));
-
+        return findFromTheListByPredicate(getNodes(), t -> t.getCode().equals(code));
     }
 
-    public INode findByRenderer(String renderer) {
-        return findBy(renderer, t -> t.getRenderer().equals(renderer));
+    public int count() {
+        return countNodesFromTheList(nodes);
     }
 
-    private INode findBy(String stringToFind, Predicate<INode> codeForFilter) {
-        if (stringToFind == null) {
-            throw new IllegalArgumentException("Parameter is null");
-        }
-        return toStream().filter(codeForFilter).findFirst().orElse(null);
+    private INode findFromTheListByPredicate(List<INode>nodes, Predicate<INode> predicate) throws IllegalArgumentException {
+        return flattenTheList(nodes)
+                .filter(predicate)
+                .findFirst()
+                .orElse(null);
     }
 
-    private Stream<INode> toStream() {
-        return nodes.stream();
+    private Stream<INode> flattenTheList(List<INode> nodes) {
+        return nodes
+                .stream()
+                .flatMap(node -> {
+                    if (isIComposite(node)) {
+                        if (((ICompositeNode) node).getNodes() == null) {
+                            return Stream.ofNullable(node);
+                        } else return
+                                Stream.concat(flattenTheList(((ICompositeNode) node).getNodes()), Stream.of(node));
+                    }
+                    return Stream.of(node);
+                });
+    }
+
+    private int countNodesFromTheList(List<INode> nodes) {
+        if (nodes == null) return 0;
+        return nodes.size() + nodes.stream()
+                .filter(MyStructure::isIComposite)
+                .map(this::castNodeToIComposite)
+                .map(ICompositeNode::getNodes)
+                .mapToInt(this::countNodesFromTheList)
+                .sum();
+    }
+
+    private static boolean isIComposite(Object o) {
+        return o instanceof ICompositeNode;
+    }
+
+    private ICompositeNode castNodeToIComposite(INode iNode) {
+        return ((ICompositeNode) iNode);
     }
 
     public void setNodes(List<INode> nodes) {
         this.nodes = nodes;
     }
 
-    public int count() {
-        return countNode(nodes);
-    }
-
-    public ICompositeNode toICompositeNode(INode iNode) {
-        return ((ICompositeNode) iNode);
-    }
-
-    public int countNode(List<INode> nodes) {
-        if (nodes == null) return 0;
-        int childrenNodes = nodes.stream()
-                .filter(MyStructure::isIComposite)
-                .map(this::toICompositeNode)
-                .map(ICompositeNode::getNodes)
-                .mapToInt(this::countNode)
-                .sum();
-        return nodes.size() + childrenNodes;
+    public List<INode>getNodes() {
+        return nodes;
     }
 }
 
