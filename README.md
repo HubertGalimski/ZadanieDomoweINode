@@ -1,4 +1,4 @@
-# ZadanieNaRozmoweINode
+# ZadanieDomoweINode nr.1
 
 ## Treść
 Zaimplementuj metody findByCode, findByRenderer, count w klasie MyStructure,
