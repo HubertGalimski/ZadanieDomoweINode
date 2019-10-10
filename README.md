@@ -21,13 +21,14 @@ operujących na strukturze danych składających się z węzłów i krawędzi(da
 
 #### interfejs INode
 - podstawowy element drzewa
-- pelniący w strukturze rolę węzła
+- pełniący w strukturze rolę węzła
 - posiadający dwie metody(getCode() i getRender()) obie zwracające wartość String.
 
 #### interfejs ICompositeNode
-- interfejs rozszerzający interfejs INode, posiada metodę getNodes() zwracjącą listę węzłów nastepnych
+- interfejs rozszerzający interfejs INode, posiada metodę getNodes() zwracającą listę węzłów następnych
 - pełniący rolę węzła pośredniego w strukturze drzewa, 
-posiadający jeden element pośredni i conajmniej jeden element następny
+posiadający jeden element pośredni i co najmniej jeden element następny
+- lista posiada zarówno obiekty rozszerzające interfejs INode lub ICompositeNode
 
 #### interfejs IMyStructure
 - posiada trzy metody, które należy zaimplementować
@@ -42,6 +43,20 @@ posiadający jeden element pośredni i conajmniej jeden element następny
 - implementuje IMyStructure
 - zawiera główna logikę projektu 
 - dostępna pod adresem [link to MyStructure!](https://github.com/HubertGalimski/ZadanieDomoweINode/blob/master/src/main/java/MyStructure.java)
+
+### Logika metod MyStructure
+##### Metoda count 
+działa na zasadzie rekurencji dlatego też została stworzona odzielna metoda pomocnicza przyjmująca jako parametr 
+listę węzłów, którą należy przeszukać w celu ich policzenia.
+W metodzie pomocniczej zastosowano strumień filtrujący, zwracający listę obiektów rozszerzających interfejs ICompositeNode, które następnie poddajemy rzutowaniu.
+
+##### Metody findByCode, findByRender
+Obie metody są niemal identyczne, różnią się jedynie przyjmowanymi parametrami dlatego też w celu zwiększenia czytelności
+i usunięcia powtarzalnego kodu została stworzona metoda pomocnicza jako parametr przyjmująca przekazany z metod głównych.
+Metoda pomocnicza przyjmuje jako paramert lambdę po które ja być przeszukane drzewo, oraz listę do przeszukania.
+Zwraca pierwszy napotkany obiekt typu INode lub null.
+W celu sprawniejszego przeszukiwania drzewa dodano metodę flattenTheList, która "spłaszcza" całe drzewo do Streama<INode>
+
 
 
 
