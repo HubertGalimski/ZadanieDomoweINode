@@ -17,16 +17,18 @@ operujących na strukturze danych składających się z węzłów i krawędzi(da
 - dla każdych węzłów oprócz ostatnich(tzw. liści) istnieje co 
   najmniej jeden element następny.
 
-### Analiza kodu/danych wejściowych zadania
+### Analiza danych wejściowych zadania
 
 #### interfejs INode
 - podstawowy element drzewa
 - pelniący w strukturze rolę węzła
 - posiadający dwie metody(getCode() i getRender()) obie zwracające wartość String.
+
 #### interfejs ICompositeNode
 - interfejs rozszerzający interfejs INode, posiada metodę getNodes() zwracjącą listę węzłów nastepnych
 - pełniący rolę węzła pośredniego w strukturze drzewa, 
 posiadający jeden element pośredni i conajmniej jeden element następny
+
 #### interfejs IMyStructure
 - posiada trzy metody, które należy zaimplementować
 ##### metody findBYCode i findByRenderer 
@@ -35,10 +37,12 @@ posiadający jeden element pośredni i conajmniej jeden element następny
 ##### metoda count 
 - przemierza drzewo zliczając węzły
 - zwraca ilość węzłów
+
 #### klasa MyStruture
 - implementuje IMyStructure
 - zawiera główna logikę projektu 
 - dostępna pod adresem [link to MyStructure!](https://github.com/HubertGalimski/ZadanieDomoweINode/blob/master/src/main/java/MyStructure.java)
+
 
 
 
