@@ -1,3 +1,5 @@
+import org.w3c.dom.ls.LSOutput;
+
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -18,7 +20,7 @@ public class MyStructure implements IMyStructure {
         return countNodesFromTheList(nodes);
     }
 
-    private INode findFromTheListByPredicate(List<INode>nodes, Predicate<INode> predicate) throws IllegalArgumentException {
+    private INode findFromTheListByPredicate(List<INode> nodes, Predicate<INode> predicate) {
         return flattenTheList(nodes)
                 .filter(predicate)
                 .findFirst()
@@ -28,23 +30,15 @@ public class MyStructure implements IMyStructure {
     private Stream<INode> flattenTheList(List<INode> nodes) {
         return nodes
                 .stream()
-                .flatMap(node -> {
-                    if (isIComposite(node)) {
-                        if (((ICompositeNode) node).getNodes() == null) {
-                            return Stream.ofNullable(node);
-                        } else return
-                                Stream.concat(flattenTheList(((ICompositeNode) node).getNodes()), Stream.of(node));
-                    }
-                    return Stream.of(node);
-                });
+                .flatMap(t-> isIComposite(t)?Stream.concat(flattenTheList(castNodeToICompositeAndReturnGetNodes(t)), Stream.of(t)):Stream.of(t));
     }
+
 
     private int countNodesFromTheList(List<INode> nodes) {
         if (nodes == null) return 0;
         return nodes.size() + nodes.stream()
                 .filter(MyStructure::isIComposite)
-                .map(this::castNodeToIComposite)
-                .map(ICompositeNode::getNodes)
+                .map(this::castNodeToICompositeAndReturnGetNodes)
                 .mapToInt(this::countNodesFromTheList)
                 .sum();
     }
@@ -53,15 +47,15 @@ public class MyStructure implements IMyStructure {
         return o instanceof ICompositeNode;
     }
 
-    private ICompositeNode castNodeToIComposite(INode iNode) {
-        return ((ICompositeNode) iNode);
+    private List<INode> castNodeToICompositeAndReturnGetNodes(INode iNode) {
+        return ((ICompositeNode) iNode).getNodes();
     }
 
     public void setNodes(List<INode> nodes) {
         this.nodes = nodes;
     }
 
-    public List<INode>getNodes() {
+    public List<INode> getNodes() {
         return nodes;
     }
 }
