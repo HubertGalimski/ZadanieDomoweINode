@@ -1,5 +1,3 @@
-import org.w3c.dom.ls.LSOutput;
-
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -27,12 +25,12 @@ public class MyStructure implements IMyStructure {
                 .orElse(null);
     }
 
+
     private Stream<INode> flattenTheList(List<INode> nodes) {
         return nodes
                 .stream()
-                .flatMap(t-> isIComposite(t)?Stream.concat(flattenTheList(castNodeToICompositeAndReturnGetNodes(t)), Stream.of(t)):Stream.of(t));
+                .flatMap(t -> isIComposite(t) ? Stream.concat(flattenTheList(castNodeToICompositeAndReturnGetNodes(t)), Stream.of(t)) : Stream.of(t));
     }
-
 
     private int countNodesFromTheList(List<INode> nodes) {
         if (nodes == null) return 0;
