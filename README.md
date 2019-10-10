@@ -6,11 +6,13 @@ unikając powielania kodu i umieszczając całą logikę w klasie MyStructure,
 z uwzględnieniem w analizie i implementacji interfejsu ICompositeNode!
   
  
+
  ## Analiza
+ ### Cel zadania
 Przedmiotem zadania jest zaprojektowanie wskazanych w jego treści funkcjonalności, 
 operujących się na strukturze danych składających z węzłów i krawędzi(dalej jako drzewo).
 
-### Założenia struktury drzewo:
+#### Założenia struktury drzewo:
 - każde drzewo ma dokładnie jeden korzeń
 - korzeń jest jedynym elementem struktury, który nie posiada
   elementów poprzednich
@@ -43,13 +45,14 @@ posiadający jeden element pośredni i co najmniej jeden element następny
 - zawiera główną logikę projektu 
 - dostępna pod adresem [link to MyStructure!](https://github.com/HubertGalimski/ZadanieDomoweINode/blob/master/src/main/java/MyStructure.java)
 
-## Logika metod MyStructure
-##### Metoda count 
+
+### Logika metod MyStructure
+#### Metoda count 
 działa na zasadzie rekurencji dlatego też została stworzona odzielna metoda pomocnicza przyjmująca jako parametr 
 listę węzłów, którą należy przeszukać w celu ich policzenia.
 W metodzie pomocniczej zastosowano strumień filtrujący, zwracający listę obiektów rozszerzających interfejs ICompositeNode, które następnie poddajemy rzutowaniu.
 
-##### Metody findByCode, findByRender
+#### Metody findByCode, findByRender
 Obie metody są niemal identyczne, różnią się jedynie przyjmowanymi parametrami dlatego też w celu zwiększenia czytelności
 i usunięcia powtarzającego się kodu została stworzona metoda pomocnicza jako parametr lambdę, po której będzie przeszukana lista. 
 Metody zwracają pierwszy napotkany obiekt typu INode zgodny z parametrem lub null
