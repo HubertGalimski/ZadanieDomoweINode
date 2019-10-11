@@ -46,11 +46,6 @@ public class MyStructure implements IMyStructure {
                 .sum();
     }
 
-    public int counter(){
-        return (int)flattenTheList(this.nodes).count();
-    }
-
-
     public void setNodes(List<INode> nodes) {
         this.nodes = nodes;
     }
