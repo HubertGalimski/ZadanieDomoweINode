@@ -1,3 +1,5 @@
+import javax.naming.InsufficientResourcesException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,15 +56,16 @@ public class Main {
         MyStructure myStructure = new MyStructure();
         myStructure.setNodes(list1);
 
-        ((ICompositeImp)iNode1).setiNodes((list2));
-        ((ICompositeImp)iNode4).setiNodes((list3));
-        ((ICompositeImp)iNode6).setiNodes((list4));
-        ((ICompositeImp)iNode10).setiNodes((list5));
-        ((ICompositeImp)iNode11).setiNodes((list6));
-        ((ICompositeImp)iNode14).setiNodes((list7));
-        ((ICompositeImp)iNode12).setiNodes((list8));
+        ((ICompositeImp) iNode1).setiNodes((list2));
+        ((ICompositeImp) iNode4).setiNodes((list3));
+        ((ICompositeImp) iNode6).setiNodes((list4));
+        ((ICompositeImp) iNode10).setiNodes((list5));
+        ((ICompositeImp) iNode11).setiNodes((list6));
+        ((ICompositeImp) iNode14).setiNodes((list7));
+        ((ICompositeImp) iNode12).setiNodes((list8));
 
-        System.out.println(myStructure.count());
+        System.out.println("count" + myStructure.count());
+        System.out.println("counter" + myStructure.counter());
 
         System.out.println(myStructure.findByCode("1").getRenderer());
         System.out.println(myStructure.findByCode("2").getRenderer());
@@ -77,8 +80,36 @@ public class Main {
         System.out.println(myStructure.findByCode("11").getRenderer());
         System.out.println(myStructure.findByCode("12").getRenderer());
         System.out.println(myStructure.findByCode("13").getRenderer());
-        System.out.println(myStructure.findByCode("14").getRenderer());
+        if ((myStructure.findByCode("") == null)) {
+            System.out.println("Null");
+        } else {
+            System.out.println("Nie null");
+        }
         System.out.println(myStructure.findByRenderer("20").getCode());
+        int i = Integer.MAX_VALUE;
+        System.out.println(++i);
+
+
+        System.out.println("___________________________________");
+        long start = System.nanoTime();
+
+        myStructure.count();
+        long end = System.nanoTime();
+        long result = end - start;
+        System.out.println(result);
+
+        System.out.println("___________________________________");
+        long start1 = System.nanoTime();
+        myStructure.counter();
+        long end1 = System.nanoTime();
+        long result1 = end1 - start1;
+        System.out.println(result1);
+
+
+        System.out.println("counter jest wolniejszy o " +(result1-result));
+
+
 
     }
+
 }

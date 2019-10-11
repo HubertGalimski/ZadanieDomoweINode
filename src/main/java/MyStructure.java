@@ -7,10 +7,16 @@ public class MyStructure implements IMyStructure {
     private List<INode> nodes;
 
     public INode findByRenderer(String renderer) {
+        if (renderer == null) {
+            throw new IllegalArgumentException("Parameter is null");
+        }
         return findFromTheListByPredicate(getNodes(), t -> t.getRenderer().equals(renderer));
     }
 
     public INode findByCode(String code) {
+        if (code == null) {
+            throw new IllegalArgumentException("Parameter is null");
+        }
         return findFromTheListByPredicate(getNodes(), t -> t.getCode().equals(code));
     }
 
@@ -25,29 +31,25 @@ public class MyStructure implements IMyStructure {
                 .orElse(null);
     }
 
-
     private Stream<INode> flattenTheList(List<INode> nodes) {
         return nodes
                 .stream()
-                .flatMap(t -> isIComposite(t) ? Stream.concat(flattenTheList(castNodeToICompositeAndReturnGetNodes(t)), Stream.of(t)) : Stream.of(t));
+                .flatMap(t -> t instanceof ICompositeNode ? Stream.concat(flattenTheList(((ICompositeNode) t).getNodes()), Stream.of(t)) : Stream.of(t));
     }
 
     private int countNodesFromTheList(List<INode> nodes) {
         if (nodes == null) return 0;
         return nodes.size() + nodes.stream()
-                .filter(MyStructure::isIComposite)
-                .map(this::castNodeToICompositeAndReturnGetNodes)
+                .filter(t -> t instanceof ICompositeNode)
+                .map(t->((ICompositeNode) t).getNodes())
                 .mapToInt(this::countNodesFromTheList)
                 .sum();
     }
 
-    private static boolean isIComposite(Object o) {
-        return o instanceof ICompositeNode;
+    public int counter(){
+        return (int)flattenTheList(this.nodes).count();
     }
 
-    private List<INode> castNodeToICompositeAndReturnGetNodes(INode iNode) {
-        return ((ICompositeNode) iNode).getNodes();
-    }
 
     public void setNodes(List<INode> nodes) {
         this.nodes = nodes;
