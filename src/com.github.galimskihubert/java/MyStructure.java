@@ -1,8 +1,13 @@
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.annotation.processing.Generated;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class MyStructure implements IMyStructure {
+
 
     private List<INode> nodes;
 
@@ -49,6 +54,7 @@ public class MyStructure implements IMyStructure {
     public void setNodes(List<INode> nodes) {
         this.nodes = nodes;
     }
+
 
     public List<INode> getNodes() {
         return nodes;
