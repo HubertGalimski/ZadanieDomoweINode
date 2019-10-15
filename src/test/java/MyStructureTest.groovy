@@ -3,10 +3,8 @@ import spock.lang.*
 @Unroll
 class MyStructureTest extends Specification {
 
-
     @Shared
     MyStructure myStructure = new MyStructure()
-
 
     def setupSpec() {
 
@@ -16,19 +14,12 @@ class MyStructureTest extends Specification {
         INode iNode4 = new InodeImp("4", "9")
         INode iNode5 = new InodeImp("5", "10")
 
-        List<INode> root = new ArrayList<>()
-        root.add(iNode1)
-
-        myStructure.setNodes(root)
-
+        myStructure.setNodes(List.of(iNode1))
         ((ICompositeImp) iNode1).setiNodes(List.of(iNode2, iNode3))
         ((ICompositeImp) iNode3).setiNodes(List.of(iNode4, iNode5))
-
     }
 
-
-    def "Should find object by findByCode and execute getRenderer on them"() {
-
+    def "Should find object by findByCode and execute getRenderer on him"() {
         when:
         def result = myStructure.findByCode(code).getRenderer()
         then:
@@ -40,30 +31,24 @@ class MyStructureTest extends Specification {
         "3"  || "8"
         "4"  || "9"
         "5"  || "10"
-
     }
 
     def "Should return null because put on empty string like a param to findByCode"() {
         when:
-        def result = myStructure.findByCode(code)
+        def result = myStructure.findByCode("")
         then:
         result == expectedResult
         where:
-        code || expectedResult
-        ""   || null
-
+        expectedResult = null
     }
 
     def "Should return null because provided the param to findByCode wasn't found"() {
-
         when:
-        def result = myStructure.findByCode(code)
+        def result = myStructure.findByCode("a")
         then:
         result == expectedResult
         where:
-        code || expectedResult
-        "a"   || null
-
+        expectedResult = null
     }
 
     def "Should involve exception because of wasn't put param to findByCode"() {
@@ -73,41 +58,36 @@ class MyStructureTest extends Specification {
         thrown(IllegalArgumentException)
     }
 
-    def "Should find object by findByRenderer and execute getCode on them"() {
+    def "Should find object by findByRenderer and execute getCode on him"() {
         when:
         def result = myStructure.findByRenderer(renderer).getCode()
         then:
         result == expectedResult
         where:
         renderer || expectedResult
-        "6"  || "1"
-        "7"  || "2"
-        "8"  || "3"
-        "9"  || "4"
-        "10"  || "5"
-
+        "6"      || "1"
+        "7"      || "2"
+        "8"      || "3"
+        "9"      || "4"
+        "10"     || "5"
     }
 
     def "Should return null because put on empty string like a param to findByRender"() {
         when:
-        def result = myStructure.findByRenderer(renderer)
+        def result = myStructure.findByRenderer("")
         then:
         result == expectedResult
         where:
-        renderer || expectedResult
-        ""   || null
-
+        expectedResult = null
     }
 
     def "Should return null because provided the param to findByRender wasn't found"() {
         when:
-        def result = myStructure.findByRenderer(renderer)
+        def result = myStructure.findByRenderer("a")
         then:
         result == expectedResult
         where:
-        renderer || expectedResult
-        "a"   || null
-
+        expectedResult = null
     }
 
     def "Should involve exception because of wasn't put param to findByRender"() {
@@ -123,24 +103,18 @@ class MyStructureTest extends Specification {
         then:
         result == expectedResult
         where:
-        count || expectedResult
-        _ || 5
+        expectedResult = 5
     }
 
-    def "Should return 0 when provided empty tree to myStructure and executed count"(){
+    def "Should return 0 when provided empty tree to myStructure and executed count"() {
         setup:
-        List<INode>inodes = new ArrayList<>()
+        List<INode> inodes = new ArrayList<>()
         myStructure.setNodes(inodes)
         when:
-        def result= myStructure.count()
+        def result = myStructure.count()
         then:
         result == expectedResult
         where:
-        count || expectedResult
-        _ || 0
-
-
+        expectedResult = 0
     }
-
-
 }
