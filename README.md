@@ -58,7 +58,7 @@ i usunięcia powtarzającego się kodu została stworzona metoda pomocnicza jako
 Metody zwracają pierwszy napotkany obiekt typu INode zgodny z parametrem lub null
 W celu sprawniejszego przeszukiwania drzewa dodano metodę flattenTheList, która "spłaszcza" całe drzewo i zwraca strumień.
 
-### Do końca dnia 10.10 zadanie zostanie uzupełnione o testy.
+
 
 
 

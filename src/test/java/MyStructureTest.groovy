@@ -43,7 +43,7 @@ class MyStructureTest extends Specification {
 
     }
 
-    def "Put on empty string like param to findByCode"() {
+    def "Should return null because put on empty string like a param to findByCode"() {
         when:
         def result = myStructure.findByCode(code)
         then:
@@ -54,7 +54,7 @@ class MyStructureTest extends Specification {
 
     }
 
-    def "Shouldn't find object by findByCode because the param is imaginary"() {
+    def "Should return null because provided the param to findByCode wasn't found"() {
 
         when:
         def result = myStructure.findByCode(code)
@@ -66,11 +66,12 @@ class MyStructureTest extends Specification {
 
     }
 
-//    def "Should involve exception because of didn't put param "() {
-//
-//
-//
-//    }
+    def "Should involve exception because of wasn't put param to findByCode"() {
+        when:
+        myStructure.findByCode()
+        then:
+        thrown(IllegalArgumentException)
+    }
 
     def "Should find object by findByRenderer and execute getCode on them"() {
         when:
@@ -87,7 +88,7 @@ class MyStructureTest extends Specification {
 
     }
 
-    def "Put on empty string like param to findByRenderer"() {
+    def "Should return null because put on empty string like a param to findByRender"() {
         when:
         def result = myStructure.findByRenderer(renderer)
         then:
@@ -98,7 +99,7 @@ class MyStructureTest extends Specification {
 
     }
 
-    def "Shouldn't find object by findByRenderer because the param is imaginary"() {
+    def "Should return null because provided the param to findByRender wasn't found"() {
         when:
         def result = myStructure.findByRenderer(renderer)
         then:
@@ -109,11 +110,37 @@ class MyStructureTest extends Specification {
 
     }
 
-//    def "Should involve exception because of didn't put param "() {
-//
-//
-//
-//    }
+    def "Should involve exception because of wasn't put param to findByRender"() {
+        when:
+        myStructure.findByRenderer()
+        then:
+        thrown(IllegalArgumentException)
+    }
+
+    def "Should return 5 when provided tree from setupSpec and executed count"() {
+        when:
+        def result = myStructure.count()
+        then:
+        result == expectedResult
+        where:
+        count || expectedResult
+        _ || 5
+    }
+
+    def "Should return 0 when provided empty tree to myStructure and executed count"(){
+        setup:
+        List<INode>inodes = new ArrayList<>()
+        myStructure.setNodes(inodes)
+        when:
+        def result= myStructure.count()
+        then:
+        result == expectedResult
+        where:
+        count || expectedResult
+        _ || 0
+
+
+    }
 
 
 }

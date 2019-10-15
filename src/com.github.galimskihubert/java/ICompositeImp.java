@@ -5,9 +5,6 @@ public class ICompositeImp implements ICompositeNode {
     String code;
     String render;
 
-    public ICompositeImp() {
-    }
-
     public ICompositeImp(String code, String render) {
         this.code = code;
         this.render = render;

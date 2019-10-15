@@ -1,7 +1,3 @@
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.annotation.processing.Generated;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
