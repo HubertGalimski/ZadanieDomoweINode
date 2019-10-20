@@ -64,3 +64,4 @@ W celu sprawniejszego przeszukiwania drzewa dodano metodę flattenTheList, któr
 
 
 
+# Zadanko

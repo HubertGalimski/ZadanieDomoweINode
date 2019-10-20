@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.concurrent.atomic.DoubleAccumulator;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -18,7 +19,7 @@ public class MyStructure implements IMyStructure {
         if (code == null) {
             throw new IllegalArgumentException("Parameter is null");
         }
-        return findFromTheListByPredicate(getNodes(), t -> t.getCode().equals(code));
+        return getList(nodes, code, Type.CODE);
     }
 
     public int count() {
@@ -42,7 +43,7 @@ public class MyStructure implements IMyStructure {
         if (nodes == null) return 0;
         return nodes.size() + nodes.stream()
                 .filter(t -> t instanceof ICompositeNode)
-                .map(t->((ICompositeNode) t).getNodes())
+                .map(t -> ((ICompositeNode) t).getNodes())
                 .mapToInt(this::countNodesFromTheList)
                 .sum();
     }
@@ -54,6 +55,37 @@ public class MyStructure implements IMyStructure {
 
     public List<INode> getNodes() {
         return nodes;
+    }
+
+
+    public INode getList(List<INode> iNodeList, String s, Type t) {
+        boolean isAdd = false;
+        List<INode> list = new ArrayList<>();
+        ListIterator<INode> listIterator = iNodeList.listIterator();
+        while (listIterator.hasNext()) {
+            INode temp = listIterator.next();
+            if (t.equals(Type.CODE)) {
+                if (temp.getCode().equals(s))
+                    return temp;
+            }
+            if (t.equals(Type.RENDERER)) {
+                if (temp.getRenderer().equals(s))
+                    return temp;
+            }
+            if (temp instanceof ICompositeNode) {
+                list.addAll(((ICompositeNode) temp).getNodes());
+                isAdd = true;
+            }
+        }
+        if (isAdd) {
+            System.out.println("1!!");
+            return getList(list, s, t);
+        }
+        return null;
+    }
+
+    public enum Type {
+        CODE, RENDERER
     }
 }
 
