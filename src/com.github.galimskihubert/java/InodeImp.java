@@ -18,4 +18,9 @@ public class InodeImp implements INode {
     }
 
 
+
+    @Override
+    public String toString() {
+        return code + " " + render;
+    }
 }

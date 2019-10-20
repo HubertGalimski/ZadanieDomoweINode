@@ -1,9 +1,6 @@
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 public class MyStructure implements IMyStructure {
-
 
     private List<INode> nodes;
 
@@ -11,66 +8,83 @@ public class MyStructure implements IMyStructure {
         if (renderer == null) {
             throw new IllegalArgumentException("Parameter is null");
         }
-        return checkTheList(nodes, renderer, Type.RENDERER);
+        return checkTheList(renderer, Type.RENDERER);
     }
 
     public INode findByCode(String code) {
         if (code == null) {
             throw new IllegalArgumentException("Parameter is null");
         }
-        return checkTheList(nodes, code, Type.CODE);
+        return checkTheList(code, Type.CODE);
     }
 
     public int count() {
-        return countNodesFromTheList(nodes);
+        int i = 0;
+        boolean changed = true;
+        List<INode> list = new ArrayList<>(nodes);
+        List<INode> temporaryList;
+        while (changed) {
+            temporaryList = new ArrayList<>();
+            ListIterator<INode> listIterator = list.listIterator(i);
+            while (listIterator.hasNext()) {
+                INode temporaryINode = listIterator.next();
+                if (temporaryINode instanceof ICompositeNode) {
+                    temporaryList.addAll(((ICompositeNode) temporaryINode).getNodes());
+                }
+            }
+            if (temporaryList.isEmpty()) {
+                changed = false;
+            } else {
+                i= list.size();
+                list.addAll(temporaryList);
+            }
+        }
+        return list.size();
     }
 
-    private int countNodesFromTheList(List<INode> nodes) {
-        if (nodes == null) return 0;
-        return nodes.size() + nodes.stream()
-                .filter(t -> t instanceof ICompositeNode)
-                .map(t -> ((ICompositeNode) t).getNodes())
-                .mapToInt(this::countNodesFromTheList)
-                .sum();
+
+    private INode checkTheList(String string, Type type) {
+        boolean changed = true;
+        List<INode> list = new ArrayList<>(nodes);
+        List<INode> temporaryList;
+        while (changed) {
+            temporaryList = new ArrayList<>();
+            ListIterator<INode> listIterator = list.listIterator();
+            while (listIterator.hasNext()) {
+                INode temporaryINode = listIterator.next();
+                if (matchesSearchCriteria(string, type, temporaryINode)) {
+                    return temporaryINode;
+                }
+                if (temporaryINode instanceof ICompositeNode) {
+                    temporaryList.addAll(((ICompositeNode) temporaryINode).getNodes());
+                }
+            }
+            if (temporaryList.isEmpty()) {
+                changed = false;
+            } else list = temporaryList;
+        }
+        return null;
     }
+
+    private boolean matchesSearchCriteria(String string, Type type, INode temporaryINode) {
+        if (type.equals(Type.CODE)) {
+            if (temporaryINode.getCode().equals(string))
+                return true;
+        } else if (type.equals(Type.RENDERER)) {
+            if (temporaryINode.getRenderer().equals(string))
+                return true;
+        }
+        return false;
+    }
+
 
     public void setNodes(List<INode> nodes) {
         this.nodes = nodes;
     }
 
 
-    public List<INode> getNodes() {
-        return nodes;
-    }
-
-
-    public INode checkTheList(List<INode> iNodeList, String s, Type t) {
-        boolean isAdd = false;
-        List<INode> list = new ArrayList<>();
-        ListIterator<INode> listIterator = iNodeList.listIterator();
-        while (listIterator.hasNext()) {
-            INode temp = listIterator.next();
-            if (t.equals(Type.CODE)) {
-                if (temp.getCode().equals(s))
-                    return temp;
-            }
-            if (t.equals(Type.RENDERER)) {
-                if (temp.getRenderer().equals(s))
-                    return temp;
-            }
-            if (temp instanceof ICompositeNode) {
-                list.addAll(((ICompositeNode) temp).getNodes());
-                isAdd = true;
-            }
-        }
-        if (isAdd) {
-            return checkTheList(list, s, t);
-        }
-        return null;
-    }
-
-    public enum Type {
-        CODE, RENDERER
+    private enum Type {
+        CODE, RENDERER;
     }
 }
 

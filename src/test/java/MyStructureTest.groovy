@@ -15,8 +15,8 @@ class MyStructureTest extends Specification {
         INode iNode5 = new InodeImp("5", "10")
 
         myStructure.setNodes(List.of(iNode1))
-        ((ICompositeImp) iNode1).setiNodes(List.of(iNode2, iNode3))
-        ((ICompositeImp) iNode3).setiNodes(List.of(iNode4, iNode5))
+        ((ICompositeImp) iNode1).setNodes(List.of(iNode2, iNode3))
+        ((ICompositeImp) iNode3).setNodes(List.of(iNode4, iNode5))
     }
 
     def "Should find object by findByCode and execute getRenderer on him"() {

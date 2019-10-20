@@ -17,7 +17,7 @@ public class ICompositeImp implements ICompositeNode {
         return iNodes;
     }
 
-    public void setiNodes(List<INode> iNodes) {
+    public void setNodes(List<INode> iNodes) {
         this.iNodes = iNodes;
     }
 
@@ -31,5 +31,8 @@ public class ICompositeImp implements ICompositeNode {
         return render;
     }
 
-
+    @Override
+    public String toString() {
+        return code + " " + render;
+    }
 }
