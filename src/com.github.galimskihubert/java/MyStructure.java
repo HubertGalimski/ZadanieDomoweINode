@@ -1,5 +1,4 @@
 import java.util.*;
-import java.util.concurrent.atomic.DoubleAccumulator;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -12,31 +11,18 @@ public class MyStructure implements IMyStructure {
         if (renderer == null) {
             throw new IllegalArgumentException("Parameter is null");
         }
-        return findFromTheListByPredicate(getNodes(), t -> t.getRenderer().equals(renderer));
+        return checkTheList(nodes, renderer, Type.RENDERER);
     }
 
     public INode findByCode(String code) {
         if (code == null) {
             throw new IllegalArgumentException("Parameter is null");
         }
-        return getList(nodes, code, Type.CODE);
+        return checkTheList(nodes, code, Type.CODE);
     }
 
     public int count() {
         return countNodesFromTheList(nodes);
-    }
-
-    private INode findFromTheListByPredicate(List<INode> nodes, Predicate<INode> predicate) {
-        return flattenTheList(nodes)
-                .filter(predicate)
-                .findFirst()
-                .orElse(null);
-    }
-
-    private Stream<INode> flattenTheList(List<INode> nodes) {
-        return nodes
-                .stream()
-                .flatMap(t -> t instanceof ICompositeNode ? Stream.concat(flattenTheList(((ICompositeNode) t).getNodes()), Stream.of(t)) : Stream.of(t));
     }
 
     private int countNodesFromTheList(List<INode> nodes) {
@@ -58,7 +44,7 @@ public class MyStructure implements IMyStructure {
     }
 
 
-    public INode getList(List<INode> iNodeList, String s, Type t) {
+    public INode checkTheList(List<INode> iNodeList, String s, Type t) {
         boolean isAdd = false;
         List<INode> list = new ArrayList<>();
         ListIterator<INode> listIterator = iNodeList.listIterator();
@@ -78,8 +64,7 @@ public class MyStructure implements IMyStructure {
             }
         }
         if (isAdd) {
-            System.out.println("1!!");
-            return getList(list, s, t);
+            return checkTheList(list, s, t);
         }
         return null;
     }

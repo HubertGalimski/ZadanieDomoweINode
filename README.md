@@ -60,8 +60,3 @@ W celu sprawniejszego przeszukiwania drzewa dodano metodę flattenTheList, któr
 
 ### Testy jednostkowe wykonano za pomocą frameworka Spock, korzystajacego z jezyka Groovy
 
-
-
-
-
-# Zadanko
