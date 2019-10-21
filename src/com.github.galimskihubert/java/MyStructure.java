@@ -24,10 +24,10 @@ public class MyStructure implements IMyStructure {
         boolean changed = true;
         List<INode> list = new ArrayList<>(nodes);
         List<INode> temporaryList;
-        int i = 0;
+        int startFrom = 0;
         while (changed) {
             temporaryList = new ArrayList<>();
-            ListIterator<INode> listIterator = list.listIterator(i);
+            ListIterator<INode> listIterator = list.listIterator(startFrom);
             while (listIterator.hasNext()) {
                 INode temporaryINode = listIterator.next();
                 if (temporaryINode instanceof ICompositeNode) {
@@ -37,7 +37,7 @@ public class MyStructure implements IMyStructure {
             if (temporaryList.isEmpty()) {
                 changed = false;
             } else {
-                i = list.size();
+                startFrom = list.size();
                 list.addAll(temporaryList);
             }
         }
