@@ -1,4 +1,6 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 
 public class MyStructure implements IMyStructure {
 
@@ -19,10 +21,10 @@ public class MyStructure implements IMyStructure {
     }
 
     public int count() {
-        int i = 0;
         boolean changed = true;
         List<INode> list = new ArrayList<>(nodes);
         List<INode> temporaryList;
+        int i = 0;
         while (changed) {
             temporaryList = new ArrayList<>();
             ListIterator<INode> listIterator = list.listIterator(i);
@@ -35,7 +37,7 @@ public class MyStructure implements IMyStructure {
             if (temporaryList.isEmpty()) {
                 changed = false;
             } else {
-                i= list.size();
+                i = list.size();
                 list.addAll(temporaryList);
             }
         }
@@ -68,11 +70,9 @@ public class MyStructure implements IMyStructure {
 
     private boolean matchesSearchCriteria(String string, Type type, INode temporaryINode) {
         if (type.equals(Type.CODE)) {
-            if (temporaryINode.getCode().equals(string))
-                return true;
+            return temporaryINode.getCode().equals(string);
         } else if (type.equals(Type.RENDERER)) {
-            if (temporaryINode.getRenderer().equals(string))
-                return true;
+            return temporaryINode.getRenderer().equals(string);
         }
         return false;
     }
@@ -84,7 +84,7 @@ public class MyStructure implements IMyStructure {
 
 
     private enum Type {
-        CODE, RENDERER;
+        CODE, RENDERER
     }
 }
 

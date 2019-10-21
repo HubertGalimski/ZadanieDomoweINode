@@ -10,7 +10,7 @@ public class ICompositeImp implements ICompositeNode {
         this.render = render;
     }
 
-    List<INode>iNodes;
+    List<INode> iNodes;
 
     @Override
     public List<INode> getNodes() {
