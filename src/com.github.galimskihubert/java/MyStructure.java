@@ -1,8 +1,9 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class MyStructure implements IMyStructure {
+
 
     private List<INode> nodes;
 
@@ -10,81 +11,48 @@ public class MyStructure implements IMyStructure {
         if (renderer == null) {
             throw new IllegalArgumentException("Parameter is null");
         }
-        return checkTheList(renderer, Type.RENDERER);
+        return findFromTheListByPredicate(getNodes(), t -> t.getRenderer().equals(renderer));
     }
 
     public INode findByCode(String code) {
         if (code == null) {
             throw new IllegalArgumentException("Parameter is null");
         }
-        return checkTheList(code, Type.CODE);
+        return findFromTheListByPredicate(getNodes(), t -> t.getCode().equals(code));
     }
 
     public int count() {
-        boolean changed = true;
-        List<INode> list = new ArrayList<>(nodes);
-        List<INode> temporaryList;
-        int startFrom = 0;
-        while (changed) {
-            temporaryList = new ArrayList<>();
-            ListIterator<INode> listIterator = list.listIterator(startFrom);
-            while (listIterator.hasNext()) {
-                INode temporaryINode = listIterator.next();
-                if (temporaryINode instanceof ICompositeNode) {
-                    temporaryList.addAll(((ICompositeNode) temporaryINode).getNodes());
-                }
-            }
-            if (temporaryList.isEmpty()) {
-                changed = false;
-            } else {
-                startFrom = list.size();
-                list.addAll(temporaryList);
-            }
-        }
-        return list.size();
+        return countNodesFromTheList(nodes);
     }
 
-
-    private INode checkTheList(String string, Type type) {
-        boolean changed = true;
-        List<INode> list = new ArrayList<>(nodes);
-        List<INode> temporaryList;
-        while (changed) {
-            temporaryList = new ArrayList<>();
-            ListIterator<INode> listIterator = list.listIterator();
-            while (listIterator.hasNext()) {
-                INode temporaryINode = listIterator.next();
-                if (matchesSearchCriteria(string, type, temporaryINode)) {
-                    return temporaryINode;
-                }
-                if (temporaryINode instanceof ICompositeNode) {
-                    temporaryList.addAll(((ICompositeNode) temporaryINode).getNodes());
-                }
-            }
-            if (temporaryList.isEmpty()) {
-                changed = false;
-            } else list = temporaryList;
-        }
-        return null;
+    private INode findFromTheListByPredicate(List<INode> nodes, Predicate<INode> predicate) {
+        return flattenTheList(nodes)
+                .filter(predicate)
+                .findFirst()
+                .orElse(null);
     }
 
-    private boolean matchesSearchCriteria(String string, Type type, INode temporaryINode) {
-        if (type.equals(Type.CODE)) {
-            return temporaryINode.getCode().equals(string);
-        } else if (type.equals(Type.RENDERER)) {
-            return temporaryINode.getRenderer().equals(string);
-        }
-        return false;
+    private Stream<INode> flattenTheList(List<INode> nodes) {
+        return nodes
+                .stream()
+                .flatMap(t -> t instanceof ICompositeNode ? Stream.concat(flattenTheList(((ICompositeNode) t).getNodes()), Stream.of(t)) : Stream.of(t));
     }
 
+    private int countNodesFromTheList(List<INode> nodes) {
+        if (nodes == null) return 0;
+        return nodes.size() + nodes.stream()
+                .filter(t -> t instanceof ICompositeNode)
+                .map(t->((ICompositeNode) t).getNodes())
+                .mapToInt(this::countNodesFromTheList)
+                .sum();
+    }
 
     public void setNodes(List<INode> nodes) {
         this.nodes = nodes;
     }
 
 
-    private enum Type {
-        CODE, RENDERER
+    public List<INode> getNodes() {
+        return nodes;
     }
 }
-
